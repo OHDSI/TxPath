@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="js/styles/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="js/styles/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/buttons.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/atlas.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/atlas.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/chart.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/panacea.css">
+	<link rel="stylesheet" type="text/css" href="js/styles/panacea-vi-styles.css">
+	
+	<title>Treatment Pathways</title>
+	<!--Adobe Edge Runtime-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+</head>
+
+<body>
+
+	<!-- ko if: pageModel.currentView() != 'splash' -->
+	<!-- /ko -->
+	<div id="wrapperMainWindow">
+		<div id="wrapperMainWindowContainer">
+			<div data-bind="if:pageModel.currentView() == 'panacea'">
+				<panacea params="{services: pageModel.services, model: pageModel}"></panacea>
+			</div>
+
+			<div data-bind="if:pageModel.currentView() == 'panaceadef'">
+				<panacea-study-def-manager params="{services: pageModel.services, model: pageModel}"></panacea-study-def-manager>
+			</div>
+			
+			<div data-bind="if:pageModel.currentView() == 'panaceasunburst'">
+				<panacea-sunburst-result params="{services: pageModel.services, model: pageModel}"></panacea-sunburst-result>
+			</div>
+		</div>
+	</div>
+	<script data-main="js/main" src="js/require.js"></script>
+</body>
+
+</html>

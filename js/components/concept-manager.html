@@ -1,0 +1,171 @@
+<div id="wrapperConcept" data-bind="if: model.currentConcept() && model.currentView() == 'concept'">
+	<div class="wrapperTitle">
+		<i class="fa fa-search"></i> Concept
+	</div>
+
+	<div class="asset-heading" data-bind="with:model.currentConcept()">
+		<span data-bind="html: $root.renderCurrentConceptSelector()"></span>
+		<span data-bind="css: {invalid: STANDARD_CONCEPT!='S'}, text:CONCEPT_NAME"></span>
+	</div>
+
+	<ul class="nav nav-tabs">
+		<li role="presentation" data-bind="click: function() {model.currentConceptMode('details');}, attr: {class: model.currentConceptMode() == 'details' ? 'active' : ''}"><a>Details</a>
+		</li>
+		<li role="presentation" data-bind="click: function() {model.currentConceptMode('related');}, attr: {class: model.currentConceptMode() == 'related' ? 'active' : ''}">
+			<a><span data-bind="if:model.loadingRelated();">
+							<i class="fa fa-refresh fa-spin"></i>
+						</span>Related Concepts</a>
+		</li>
+
+		<li role="presentation" data-bind="click: function() {model.currentConceptMode('hierarchy');}, attr: {class: model.currentConceptMode() == 'hierarchy' ? 'active' : ''}">
+			<a><span data-bind="if:model.loadingRelated();">
+							<i class="fa fa-refresh fa-spin"></i>
+						</span>Hierarchy</a>
+		</li>
+
+		<li role="presentation" data-bind="click: function() {model.currentConceptMode('recordcounts');}, attr: {class: model.currentConceptMode() == 'recordcounts' ? 'active' : ''}">
+			<a>Record Counts</a>
+		</li>
+	</ul>
+
+	<div class="paddedWrapper" data-bind="if:model.currentConceptMode() == 'recordcounts' ">
+
+		<div data-bind="visible:loadingSourceCounts()" class="loading">loading</div>
+
+		<div data-bind="visible:!loadingSourceCounts()">
+			<div class="heading">Record Counts across Sources</div>
+			<table width="100%" class="conceptTable stripe compact hover" cellspacing="0" data-bind="dataTable:{
+								data: sourceCounts(),
+								options: {
+									dom: 't',
+									language: {
+										search: 'Filter Sources: '
+									},
+									lengthMenu: [[-1], ['All']],
+									orderClasses: false,
+									ordering: true,
+									order: [[ 2, 'desc' ]],
+									columns: [
+											{ title: 'Source Name', data: 'sourceName', width: '50%'},
+											{ title: 'RC', data: 'recordCount'},
+											{ title: 'DRC', data: 'descendantRecordCount'}
+									]
+							}
+						}">
+			</table>
+		</div>
+	</div>
+
+	<div id="wrapperConceptHierarchy" data-bind="if:model.currentConceptMode() == 'hierarchy' && !model.loadingRelated()">
+
+		<div id="wrapperParents">
+			<div class="heading">Parents</div>
+			<table width="100%" class="conceptTable stripe compact hover" cellspacing="0" data-bind="dataTable:{
+								data: model.metarchy.parents(),
+								options: {
+									dom: 't',
+									language: {
+										search: 'Filter Broader Concepts: '
+									},
+									rowCallback: model.contextSensitiveLinkColor,
+									lengthMenu: [[-1], ['All']],
+									orderClasses: false,
+									ordering: true,
+									order: [[ 6, 'desc' ]],
+									columns: [
+											{ title: '', render: model.renderConceptSelector, orderable:false, searchable:false},
+											{ title: 'Id', data: 'CONCEPT_ID'},
+											{ title: 'Code', data: 'CONCEPT_CODE'},
+											{ title: 'Name', data: 'CONCEPT_NAME', render: model.renderLink, width: '50%'},
+											{ title: 'Class', data: 'CONCEPT_CLASS_ID' },
+											{ title: 'RC', data: 'RECORD_COUNT'},
+											{ title: 'DRC', data: 'DESCENDANT_RECORD_COUNT'},
+											{ title: 'Domain', data: 'DOMAIN_ID' },
+											{ title: 'Vocabulary', data: 'VOCABULARY_ID', width: '100px' }
+									]
+							}
+						}">
+			</table>
+		</div>
+		<div id="wrapperHierarchyAnchor" class="heading" data-bind="text:model.currentConcept().CONCEPT_CODE + ' ' + model.currentConcept().CONCEPT_NAME">
+		</div>
+		<div id="wrapperChildren">
+			<div class="heading">Children</div>
+			<table width="100%" class="conceptTable stripe compact hover" cellspacing="0" data-bind="dataTable:{
+								data: model.metarchy.children(),
+								language: {
+									search: 'Filter Specific Concepts: '
+								},
+								options: {
+									dom: 't',
+									rowCallback: model.contextSensitiveLinkColor,
+									lengthMenu: [[-1], ['All']],
+									orderClasses: false,
+									ordering: true,
+									order: [[ 6, 'desc' ]],
+									columns: [
+											{ title: '', render: model.renderConceptSelector, orderable:false, searchable:false},
+											{ title: 'Id', data: 'CONCEPT_ID'},
+											{ title: 'Code', data: 'CONCEPT_CODE'},
+											{ title: 'Name', data: 'CONCEPT_NAME', render: model.renderLink, width: '50%'},
+											{ title: 'Class', data: 'CONCEPT_CLASS_ID' },
+											{ title: 'RC', data: 'RECORD_COUNT'},
+											{ title: 'DRC', data: 'DESCENDANT_RECORD_COUNT'},
+											{ title: 'Domain', data: 'DOMAIN_ID' },
+											{ title: 'Vocabulary', data: 'VOCABULARY_ID', width: '100px' }
+									]
+							}
+						}">
+			</table>
+		</div>
+	</div>
+
+	<div id="wrapperConceptDetails" data-bind="if:model.currentConceptMode() == 'details'">
+		<table data-bind="with: model.currentConcept">
+			<thead>
+				<tr>
+					<th>Property</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Concept Name</td>
+					<td data-bind="text:CONCEPT_NAME"></td>
+				</tr>
+				<tr>
+					<td>Domain Id</td>
+					<td data-bind="text:DOMAIN_ID"></td>
+				</tr>
+				<tr>
+					<td>Concept Class Id</td>
+					<td data-bind="text:CONCEPT_CLASS_ID"></td>
+				</tr>
+				<tr>
+					<td>Vocabulary Id</td>
+					<td data-bind="text:VOCABULARY_ID"></td>
+				</tr>
+				<tr>
+					<td>Concept Id</td>
+					<td data-bind="text:CONCEPT_ID"></td>
+				</tr>
+				<tr>
+					<td>Concept Code</td>
+					<td data-bind="text:CONCEPT_CODE"></td>
+				</tr>
+				<tr>
+					<td>Invalid Reason</td>
+					<td data-bind="text:INVALID_REASON_CAPTION, attr: { class: INVALID_REASON_CAPTION == 'Valid' ? '' : 'invalid'}"></td>
+				</tr>
+				<tr>
+					<td>Standard Concept</td>
+					<td data-bind="text:STANDARD_CONCEPT_CAPTION, attr: { class: STANDARD_CONCEPT_CAPTION == 'Standard' ? '' : 'invalid'}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div data-bind="visible: model.currentConceptMode() == 'related' && !model.loadingRelated()">
+		<faceted-datatable params="{orderColumn: 7, columns: model.relatedConceptsColumns, options: model.relatedConceptsOptions, reference: model.relatedConcepts, rowCallback: model.contextSensitiveLinkColor }"></faceted-datatable>
+	</div>
+</div>

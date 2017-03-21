@@ -5,6 +5,7 @@
 TxPath is in the midst of a revision to support compatibility with SQL Render.  This repo brings together the code from all sections of TxPath.  THIS REPO DOES NOT ITSELF CONSTITUTE A RUNNABLE APPLICATION.
 
 **Sections**
+
 TxPath has three main components:
 
 * UI for defining studies  (Study Definition UI Files) - These currently live in Atlas panacea branch
@@ -13,7 +14,7 @@ TxPath has three main components:
 
 **Community Objectives**
 * Modify TxPath WebAPI files to support latest version of WebAPI and SqlRender
-* Deploy full UI as standalone application pending determination of optimal location for TxPath within Atlas.
+* Determine optimal location for TxPath within Atlas or deploy as full standalone application
 
 
 Apache 2.0 License
